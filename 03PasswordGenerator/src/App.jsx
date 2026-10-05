@@ -1,4 +1,4 @@
-import { useState, useCallback,useEffect, useRef } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 // import './App.css'
 
 function App() {
@@ -18,72 +18,69 @@ function App() {
     }
     setPassword(pass)
   }, [number, schar, length, setPassword])
- 
-  const passRef =useRef(null)
-  const copyPasswordToClipboard =useCallback(()=>{
+
+  const passRef = useRef(null)
+  const copyPasswordToClipboard = useCallback(() => {
     window.navigator.clipboard.writeText(password)
     passRef.current?.select()
-  },[password])
-  useEffect(()=>{
+  }, [password])
+  useEffect(() => {
     passwordgenerator()
-  },[length,number,schar,passwordgenerator])
+  }, [length, number, schar, passwordgenerator])
 
   return (
-    <div className="bg-black">
-      <div className=" w-full mx-auto  my-15  py-4 rounded-lg bg-gray-700 text-orange-500">
-        <h1 className="text-white text-center text-xl">Password Generator</h1>
-        <div className="flex justify-center rounded-lg mb-4  shadow overflow-hidden">
-          <input
-            type="text"
-            value={password}
-            placeholder='password'
-            className=" flex w-full rounded-b-lg  py-1 px-5 outline-none bg-white max-w-md center"
-            readOnly
-            ref={passRef}
-          />
-          <button 
-            onClick={copyPasswordToClipboard}
-            className=" bg-blue-600 rounded-md text-white px-2 py-1 mx-1 shrink-0
+    <div className=" w-full mx-auto  my-10  py-2 rounded-lg bg-gray-700 text-orange-500">
+      <h1 className="text-white text-center text-xl">Password Generator</h1>
+      <div className="flex justify-center rounded-lg mb-4  shadow overflow-hidden">
+        <input
+          type="text"
+          value={password}
+          placeholder='password'
+          className=" flex w-full rounded-b-lg  py-1 px-5 outline-none bg-white max-w-md center"
+          readOnly
+          ref={passRef}
+        />
+        <button
+          onClick={copyPasswordToClipboard}
+          className=" bg-blue-600 rounded-md text-white px-2 py-1 mx-1 shrink-0
               hover:bg-blue-700
               active:scale-95
               active:bg-blue-800
               transition
             ">
-            copy</button>
-        </div>
-        <div>
-            <input
-              type="range"
-              value={length}
-              min={8}
-              max={50}
-              className="cursor-pointer bg-white"
-              onChange={(e) => { setLength(e.target.value) }}
-            />
-            <label>Length: {length}</label>
-            <input
-              type="checkbox"
-              value={number}
-              className="mx-2 bg-white"
-              onChange={()=>{
-                setNumber((prev)=>!prev)
-              }}
-            />
-            <label>Number</label>
-            <input
-              type="checkbox"
-              value={schar}
-              className="mx-2"
-               onChange={()=>{
-                setSchar((prev)=>!prev)
-              }}
-            />
-            <label>Char</label>
-        </div>
+          copy</button>
+      </div>
+      <div>
+        <input
+          type="range"
+          value={length}
+          min={8}
+          max={50}
+          className="cursor-pointer bg-white"
+          onChange={(e) => { setLength(e.target.value) }}
+        />
+        <label>Length: {length}</label>
+        <input
+          type="checkbox"
+          value={number}
+          className="mx-2 bg-white"
+          onChange={() => {
+            setNumber((prev) => !prev)
+          }}
+        />
+        <label>Number</label>
+        <input
+          type="checkbox"
+          value={schar}
+          className="mx-2"
+          onChange={() => {
+            setSchar((prev) => !prev)
+          }}
+        />
+        <label>Char</label>
       </div>
     </div>
-
-
+  
   )
 }
 
