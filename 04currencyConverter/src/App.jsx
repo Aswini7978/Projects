@@ -1,122 +1,79 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { Input } from './component'
+import useCurrencyinfo from './hooks/useCurrencyinfo'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [amount, setAmount] = useState("")
+  const [from, setFrom]= useState("usd")
+  const [to, setTo]= useState("inr")
+  const [convertedAmount, setConvertedAmount] = useState("")
+
+  const currencyinfo = useCurrencyinfo(from)
+  const options = Object.keys(currencyinfo)
+  const swap = () =>{
+    setFrom(to),
+    setTo(from)
+    setConvertedAmount(amount)
+    setAmount(convertedAmount)
+  }
+  const convert = () =>{
+    setConvertedAmount(Number(amount* currencyinfo[to]))
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+        <div
+            className="w-full h-screen flex flex-wrap justify-center items-center bg-cover bg-no-repeat"
+            style={{
+                backgroundImage: `url('Pic.jpg')`,
+            }}
         >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+            <div className="w-full flex items-center justify-center gap-8 px-10">
+                <img src="Currency.jpg" alt="Trading" className='w-1/3 rounded-xl'/>
+                <div className="w-2/3 max-w-2xl border border-gray-600 rounded-lg p-8 backdrop-blur-sm bg-white/30 ">
+                    <form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            convert()
+                           
+                        }}
+                    >
+                        <div className="w-full mb-1">
+                            <Input
+                                label="From"
+                                amount={amount}
+                                currencyOptions={options}
+                                onCurrencyChange ={(currency)=> setFrom(currency)}
+                                selectCurrency={from}
+                                onAmountChange={(amount) => setAmount(amount)}
+                            />
+                        </div>
+                        <div className="relative w-full h-0.5">
+                            <button
+                                type="button"
+                                className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 border-2 border-white rounded-md bg-blue-600 text-white px-2 py-0.5"
+                                onClick={swap}
+                            >
+                                swap
+                            </button>
+                        </div>
+                        <div className="w-full mt-1 mb-4">
+                            <Input
+                                label="To"
+                                amount={convertedAmount}
+                                currencyOptions={options}
+                                onCurrencyChange ={(currency)=> setTo(currency)}
+                                selectCurrency={to}
+                                amountDisable
+                            />
+                        </div>
+                        <button type="submit" className="w-full bg-blue-600 text-white px-4 py-3 rounded-lg">
+                            Convert {from.toUpperCase()} to {to.toUpperCase()}
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    );
 }
 
 export default App
